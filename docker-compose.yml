@@ -1,4 +1,4 @@
-# This is a sample docker-compose file for a Node.js application with a MongoDB database.
+
 version: '3.8'
 
 services:
@@ -9,18 +9,18 @@ services:
     environment:
       - PORT=5000
       - DB_PATH=/app/data/recipes.db
-  volumes:
-    -backend-data:/app/data
+    volumes:
+      - backend_data:/app/data
 
   frontend:
+    build:
       context: ./frontend
       args:
-        - REACT_APP_BACKEND_URL=http://backend:5000
-      
-      ports:
-        - "3000:80"
-      depends_on:
-        - backend
-volumes:
-  -frontend-data:/app/data
+        VITE_API_URL: http://localhost:5000
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
 
+volumes:
+  backend_data:
