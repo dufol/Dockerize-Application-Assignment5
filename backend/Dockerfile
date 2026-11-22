@@ -1,7 +1,7 @@
 
 ## Dockerfile for the frontend application
 
-FROM node:14-alpine
+FROM node:16-alpine
 
 ## Set the working directory inside the container
 WORKDIR /app
@@ -16,10 +16,10 @@ RUN npm install
 COPY . .
 
 ## Create a directory for the public files
-RUN mkdir -p /app/public
+RUN mkdir -p /app/data
 
 ## Expose the port that the application will run on
-EXPOSE 8080
+EXPOSE 5000
 
 ## Start the application
 CMD ["npm", "start"]

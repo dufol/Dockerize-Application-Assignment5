@@ -1,5 +1,5 @@
 #Build stage
-FROM node:18-alpine as build-stage
+FROM nginx:alpine
 
 # Set the working directory inside the container
 WORKDIR /app
