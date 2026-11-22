@@ -1,36 +1,34 @@
-#Build stage
-FROM nginx:alpine
 
-# Set the working directory inside the container
+# Build stage
+FROM node:18-alpine AS build-stage
+
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Copy package files
 COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the application code to the working directory
-COPY . .    
+# Copy application files
+COPY . .
 
-## Create a directory for the public files
+# Set API URL
 ARG VITE_API_URL=http://localhost:5000
-
-## Set the environment variable for the API URL
 ENV VITE_API_URL=$VITE_API_URL
 
-
-# Build the application
+# Build production application
 RUN npm run build
 
-Production stage
-FROM nginx:alpine 
+# Production stage
+FROM nginx:alpine
 
-# Copy the built application from the build stage to the Nginx container
+# Copy built files into Nginx
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 
-# Expose the port that Nginx will run on
-EXPOSE 80   
+# Expose Nginx port
+EXPOSE 80
 
-# Start Nginx when the container starts
+# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
